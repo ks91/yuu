@@ -1,0 +1,48 @@
+{% extends "kmdmarche/layout.html" %}
+{% block content %}
+<center>
+<h1>{{menu_name}}<br/>>>>>></h1>
+<h2>{{ info }}</h2>
+<!-- <p><a href="/mypage">マイページはこちら！</a></p> -->
+<button type="button" class="widebutton"　name="mypage" onclick="location.href='/kmdmarche/mypage'" value="fff">
+My Page
+</button>
+<br/>
+<h1>>>>>></h1>
+</center>
+<br/>
+<table width="100%" height="70%" cellspacing="5" cellpadding="10">
+<tr align="center">
+<th bgcolor="#eeb417">Buyer</th>
+<th bgcolor="#eeb417">Item</th>
+<th bgcolor="#eeb417">Time</th>
+<th bgcolor="#eeb417">Seller</th>
+</tr>
+{% for tx in transactions %}
+<tr>
+<td>{{tx['from_name']}}</td>
+<td>{{tx['label']}}</td>
+<td>{{tx['timestamp']}}</td>
+<td>{{tx['to_name']}}</td>
+</tr>
+{% endfor %}
+</table>
+<ul class="listnav">
+{% if count_before > 0 %}
+<li><a href="/kmdmarche/tx?offset={{0 if count_before < count else count_before - count}}">&laquo; PREV</a></li>
+{% else %}
+<li><span style="color: #808080;">&laquo; PREV</span></li>
+{% endif %}
+{% if count_after > 0 %}
+<li><a href="/kmdmarche/tx?offset={{count_before + count}}">NEXT &raquo;</a></li>
+{% else %}
+<li><span style="color: #808080;">NEXT &raquo;</span></li>
+{% endif %}
+</ul>
+<center>
+<h1>>>>>></h1>
+<button type="button" class="backbutton"　name="back" onclick="location.href='/kmdmarche/'" value="sss">
+Back to Menu
+</button>
+</center>
+{% endblock %}

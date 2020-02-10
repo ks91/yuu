@@ -1,0 +1,14 @@
+{% extends "kmdmarche/layout.html" %}
+{% block content %}
+<center>
+<h1>ERROR</h1>
+<h3>
+{{message}}
+</h3>
+<p>
+<button type="button" class="backbutton"　name="back" onclick="history.back()" value="sss">
+    Back {% if back_name %}to {{back_name}}{% endif %}
+</button>
+</p>
+</center>
+{% endblock %}

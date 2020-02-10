@@ -1,0 +1,27 @@
+{% extends "kmdmarche/layout.html" %}
+{% block content %}
+<div>
+<img src="/kmdmarche/static/images/top6.jpg" width="100%"  alt="top-picture">
+</div>
+<center>Already member? <a href="/kmdmarche/log-in">Log in</a></center>
+<center>
+<h2>please enter your nick name!</h2>
+<h3>TIME: {{ time }}</h3>
+<h1>>>>>></h1>
+</center>
+<form action="/kmdmarche/register" method="post">
+<div>
+<center>
+<h3>Nick Name：<input type="text" name="name" /></h3>
+</center>
+</div>
+<center>
+<h1>>>>>></h1>
+<p><button type="submit" class="widebutton">
+Register
+</button>
+</p>
+</center>
+<!-- <p><input type="submit" class="btn btn-warning" value="登録" /></p> -->
+</form>
+{% endblock %}

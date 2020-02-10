@@ -1,0 +1,36 @@
+{% extends "kmdmarche/layout.html" %}
+{% block content %}
+<center>
+<h1>Welcome to Cocotano!</h1>
+<h1>KMD FORUM 2019</h1>
+<h1>>>>>><br/>Hi how are you? </h1>
+<h1>{{name}}!<br/>>>>>></h1>
+</center>
+<center>
+<p>
+<button type="button" class="widebutton" name="qr" onclick="location.href='/kmdmarche/pay'">
+Sell
+</button>
+</p>
+<p>
+<button type="button" class="widebutton" name="openashop" onclick="location.href='/kmdmarche/shopowner'" value="ddd">
+Open a shop?
+</button>
+<p/>
+<p>
+<button type="button" class="widebutton"　name="TX" onclick="location.href='/kmdmarche/tx'" value="eee">
+Transaction
+</button>
+</p>
+<p>
+<button type="button" class="widebutton"　name="shops" onclick="location.href='/kmdmarche/ownerlist'" value="fff">
+Shop List
+</button>
+</p>
+<p>
+<button type="button" class="widebutton" name="logout" onclick="location.href='/kmdmarche/log-out'" value="fff">
+Log Out
+</button>
+</p>
+</center>
+{% endblock %}
