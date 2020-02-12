@@ -1,35 +1,34 @@
-{% extends "kmdmarche/layout.html" %}
+{% extends "yuu/layout.html" %}
 {% block content %}
 <center>
-<h1>Welcome to Cocotano!</h1>
-<h1>KMD FORUM 2019</h1>
-<h1>>>>>><br/>Hi how are you? </h1>
+<h1>yuu' へようこそ</h1>
+<h1>>>>>><br/>ごきげんいかがですか？ </h1>
 <h1>{{name}}!<br/>>>>>></h1>
 </center>
 <center>
 <p>
-<button type="button" class="widebutton" name="qr" onclick="location.href='/kmdmarche/pay'">
-Sell
+<button type="button" class="widebutton" name="qr" onclick="location.href='/yuu/pay'">
+何かする？
 </button>
 </p>
 <p>
-<button type="button" class="widebutton" name="openashop" onclick="location.href='/kmdmarche/shopowner'" value="ddd">
-Open a shop?
+<button type="button" class="widebutton" name="openashop" onclick="location.href='/yuu/contributions'" value="ddd">
+何かできることがある？
 </button>
 <p/>
 <p>
-<button type="button" class="widebutton"　name="TX" onclick="location.href='/kmdmarche/tx'" value="eee">
-Transaction
+<button type="button" class="widebutton"　name="TX" onclick="location.href='/yuu/tx'" value="eee">
+これまでの取引
 </button>
 </p>
 <p>
-<button type="button" class="widebutton"　name="shops" onclick="location.href='/kmdmarche/ownerlist'" value="fff">
-Shop List
+<button type="button" class="widebutton"　name="shops" onclick="location.href='/yuu/contributionlist'" value="fff">
+できることリスト
 </button>
 </p>
 <p>
-<button type="button" class="widebutton" name="logout" onclick="location.href='/kmdmarche/log-out'" value="fff">
-Log Out
+<button type="button" class="widebutton" name="logout" onclick="location.href='/yuu/log-out'" value="fff">
+ログアウト
 </button>
 </p>
 </center>

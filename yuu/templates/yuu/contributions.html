@@ -1,0 +1,30 @@
+{% extends "yuu/layout.html" %}
+{% block content %}
+<center>
+<h1>{{menu_name}}</h1>
+<p>{{ info }}</p>
+<form action="/yuu/contributions" method="post">
+<h1>>>>>></h1>
+<h2>何ができますか？</h2>
+<p/>
+<h3>
+<input type="text" name="a" list="item" placeholder="選ぶか入力してください" autocomplete="off">
+  <datalist id="item">
+    <option value="手伝う">
+    <option value="お話する">
+  </datalist>
+</h3>
+<h2>いつまで : {{ time }}</h2>
+<h1>>>>>></h1>
+<button type="submit" class="widebutton" value="Open">
+公開する
+</button>
+</form>
+<div>
+</div>
+<h1>>>>>></h1>
+<button type="button" onclick="location.href='/yuu/'" class="backbutton"　name="back"  value="sss">
+メニューに戻る
+</button>
+</center>
+{% endblock %}

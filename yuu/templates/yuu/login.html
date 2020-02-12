@@ -1,24 +1,23 @@
-{% extends "kmdmarche/layout.html" %}
+{% extends "yuu/layout.html" %}
 {% block content %}
 <center>
-<h2>please enter your nick name!</h2>
-<h3>TIME: {{ time }}</h3>
+<h2>ニックネームをどうぞ</h2>
+<h3>日時: {{ time }}</h3>
 <h1>>>>>></h1>
 </center>
-<form action="/kmdmarche/log-in" method="post">
+<form action="/yuu/log-in" method="post">
 <div>
 <center>
-<h3>Nick Name：<input type="text" name="name" /></h3>
+<h3>ニックネーム：<input type="text" name="name" /></h3>
 </center>
 </div>
 <center>
 <h1>>>>>></h1>
 <p>
 <button type="submit" value="Log in" class="widebutton"/>
-Log In
+ログイン
 </button>
 </p>
 </center>
-<!-- <p><input type="submit" class="btn btn-warning" value="登録" /></p> -->
 </form>
 {% endblock %}

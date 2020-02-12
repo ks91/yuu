@@ -1,19 +1,19 @@
-{% extends "kmdmarche/layout.html" %}
+{% extends "yuu/layout.html" %}
 {% block content %}
 <center>
-<h1>{{menu_name}} for {{name}}</h1>
+<h1>{{name}} の {{menu_name}}</h1>
 <h1>>>>>></h1>
-<h2>Your balance : {{ balance }}&nbsp;{{symbol}}</h2>
-<h2>Money you paid : {{ spendcoin }}&nbsp;{{symbol}}</h2>
-<h2>Money you received : {{ getcoin }}&nbsp;{{symbol}}</h2>
+<h2>残高 : {{ balance }}&nbsp;{{symbol}}</h2>
+<h2>支出 : {{ spendcoin }}&nbsp;{{symbol}}</h2>
+<h2>収入 : {{ getcoin }}&nbsp;{{symbol}}</h2>
 <h1>>>>>></h1>
 <table width="100%" height="70%">
 <tr align="center">
-<th bgcolor="#eeb417">Buyer</th>
-<th bgcolor="#eeb417">Time</th>
-<th bgcolor="#eeb417">Item</th>
-<th bgcolor="#eeb417">Money</th>
-<th bgcolor="#eeb417">Seller</th>
+<th bgcolor="#eeb417">誰が</th>
+<th bgcolor="#eeb417">いつ</th>
+<th bgcolor="#eeb417">何を</th>
+<th bgcolor="#eeb417">何yuu'で</th>
+<th bgcolor="#eeb417">誰から</th>
 </tr>
 {% for tx in transactions %}
 {% if tx['to_name'] == name %}
@@ -30,8 +30,8 @@
 {% endfor %}
 </table>
 <h1>>>>>></h1>
-<button type="button" class="backbutton"　name="back" onclick="location.href='/kmdmarche/'" value="sss">
-Back to Menu
+<button type="button" class="backbutton"　name="back" onclick="location.href='/yuu/'" value="sss">
+メニューに戻る
 </button>
 </center>
 {% endblock %}

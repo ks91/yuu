@@ -1,13 +1,13 @@
-{% extends "kmdmarche/layout.html" %}
+{% extends "yuu/layout.html" %}
 {% block content %}
 <center>
-<h1>ERROR</h1>
+<h1>エラー</h1>
 <h3>
 {{message}}
 </h3>
 <p>
 <button type="button" class="backbutton"　name="back" onclick="history.back()" value="sss">
-    Back {% if back_name %}to {{back_name}}{% endif %}
+    {% if back_name %} {{back_name}}に{% endif %}戻る
 </button>
 </p>
 </center>

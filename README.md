@@ -1,1 +1,1 @@
-# simple marche web-app
+# yuu' : Local Currency for Sustainable Community Economy

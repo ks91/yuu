@@ -1,0 +1,34 @@
+{% extends "yuu/layout.html" %}
+{% block content %}
+<center>
+<h1>{{menu_name}}</h1>
+<h3>{{ info }}</h3>
+<h1>>>>>></h1>
+</center>
+<table width="100%" height="70%" cellspacing="5" cellpadding="10">
+<tr align="center">
+<th bgcolor="#eeb417">登録日時</th>
+<th bgcolor="#eeb417">誰から</th>
+<th bgcolor="#eeb417">何を</th>
+<th bgcolor="#eeb417">いつまで</th>
+</tr>
+{% for contribution in contributions %}
+{% if contribution['name'] == name %}
+<tr style="color: #ff8080">
+{% else %}
+<tr>
+{% endif %}
+<td>{{contribution['timestamp']}}</td>
+<td>{{contribution['name']}}</td>
+<td>{{contribution['item']}}</td>
+<td>{{contribution['good_until']}}</td>
+</tr>
+{% endfor %}
+</table>
+<center>
+<h1>>>>>></h1>
+<button type="button" class="backbutton"　name="back" onclick="location.href='/yuu/'" value="sss">
+メニューに戻る
+</button>
+</center>
+{% endblock %}

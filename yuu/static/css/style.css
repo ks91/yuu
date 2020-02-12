@@ -1,5 +1,5 @@
 body {
-  font-family: 'Comic Sans MS', 'Marker Felt', sans-serif;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
 }
 
 table{
@@ -19,7 +19,7 @@ table tr:nth-child(odd){
 
 button.widebutton {
   color: #000000;
-  background-color: #eeb417;
+  background-color: #ba9bc9;
   font-size: 30;
   width: 80%;
   height: 50px;
@@ -27,7 +27,7 @@ button.widebutton {
 
 button.backbutton {
 color: #000000;
-background-color: #d8bfd8;
+background-color: #ba9bc9;
 font-size: 30;
 width: 40%;
 height: 50px
