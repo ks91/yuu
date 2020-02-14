@@ -14,28 +14,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-from flask import Flask
 
 
-app = Flask(__name__)
+msg_dict = {
+    '* CREDIT *': '* 信頼 *',
+    '* FOREVER *': '* いつまでも *',
+}
 
 
-from api.body import api
-app.register_blueprint(api, url_prefix='/api')
-
-from payment.views import payment
-app.register_blueprint(payment, url_prefix='/payment')
-
-# for yuu
-from yuu.app import yuu
-app.register_blueprint(yuu, url_prefix='/yuu')
-
-
-app.secret_key = 'Nnj!fvxbbV8*oU3pWyYb'
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', threaded=True)
-
-
-# end of run.py
+# end of message.py

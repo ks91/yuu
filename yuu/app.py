@@ -28,17 +28,17 @@ from flask import g, url_for
 from io import BytesIO
 from PIL import Image
 
+from yuu.message import msg_dict
+
 
 # Prior to use this web application, please define a currency using API,
 # and put the mint_id here.
 MINT_ID = '1f35585c480efc3f924d85029defe1242437b3ef4f42aedabcbec0e4acd2b3af'
 
-# Put the initial amount when signed up
-INIT_AMOUNT = '24'
 
-# Put API host name here, plus prefix for URL encoded in QR code.
+# Put API host name here, and prefix for URL encoded in QR code.
 PREFIX_API = 'http://127.0.0.1:5000'
-PREFIX_QR  = 'http://127.0.0.1:5000'
+PREFIX_QR  = 'http://192.168.86.87:5000'
 
 # Put base time (to count transactions) in Unix time here.
 BASE_TIME = 0
@@ -184,6 +184,18 @@ def get_balance(name, user_id, done=False):
             to_name=to_name, items=items, sending=request.method=='GET')
 
 
+def get_time_from_string(sDate, sTime):
+    if sDate is None or len(sDate) <= 0:
+        time = INFTY_TIME
+    else:
+        if sTime is None or len(sTime) <= 0:
+            sTime = '23:59'
+        time = datetime.strptime(sDate + ' ' + sTime + ' JST',
+                FORMAT_TIME + ' %Z').timestamp()
+
+    return time
+
+
 def qrmaker(s):
     qr_img = qr.make(s)
 
@@ -206,59 +218,78 @@ def reform_list(txs):
         tx['timestamp'] = t.strftime(FORMAT_TIME)
         if len(tx['from_name']) <= 0:
             tx['from_name'] = "yuu'"
-            tx['label'] = '*** JOINED ***'
+            tx['label'] = msg_dict['* CREDIT *']
 
 
 def render_top():
-    timeString = datetime.now(JST).strftime(FORMAT_TIME)
-    return render_template('yuu/register.html', time=timeString)
+    return render_template('yuu/login.html')
 
 
 yuu = Blueprint('yuu', __name__, template_folder='templates',
         static_folder='./static')
 
 
+@yuu.route("/contributions", methods=['GET', 'POST'])
+def contributions():
+    if 'user_id' not in session:
+        return render_top()
+
+    if request.method == 'GET':
+        return render_template("yuu/contributions.html")
+
+    name = session['name']
+    item = request.form.get('item')
+
+    if item is None or len(item) <= 0:
+        return render_template('yuu/error.html',
+                message='item is missing', back_name='contributions')
+
+    sDate = request.form.get('date')
+    sTime = request.form.get('time')
+    good_until = get_time_from_string(sDate, sTime)
+
+    store = Store()
+    store.setup()
+    store.write_item(int(time.time()), good_until, name, item,
+            type='contributions')
+    store.close()
+
+    return render_template("yuu/contributions_posted.html")
+
+
+@yuu.route("/list-contributions")
+def contributions_list():
+    if 'user_id' not in session:
+        return render_top()
+
+    name = session['name']
+
+    store = Store()
+    store.setup()
+    contributions = store.get_item_list('contributions', 10)
+    store.close()
+
+    for contribution in contributions:
+        t = datetime.fromtimestamp(contribution['timestamp'], JST)
+        contribution['timestamp'] = t.strftime(FORMAT_TIME)
+        if contribution['good_until'] == INFTY_TIME:
+            contribution['good_until'] = msg_dict['* FOREVER *']
+        else:
+            t = datetime.fromtimestamp(contribution['good_until'], JST)
+            contribution['good_until'] = t.strftime(FORMAT_TIME)
+
+    return render_template("yuu/list_contributions.html", name=name,
+            contributions=contributions)
+
+
 @yuu.route('/')
-@yuu.route('/register', methods=['GET', 'POST'])
-def register():
+@yuu.route('/log-in', methods=['GET', 'POST'])
+def log_in():
     if 'user_id' in session:
         return render_template('yuu/top.html', name=session['name'])
 
     if request.method == 'GET':
         return render_top()
-
-    name = request.form.get('name')
-
-    if name is None or len(name) <= 0:
-        return render_template('yuu/error.html',
-                message='name is missing', back_name='Register')
-
-    r = requests.post(PREFIX_API + '/api/user', data={'name': name})
-    res = r.json()
-
-    if r.status_code != 201:
-        return render_template('yuu/error.html',
-                message=res['error']['message'], back_name='Register')
-
-    user_id = res['user_id']
-
-    session['name'] = name
-    session['user_id'] = user_id
-
-    r = requests.post(PREFIX_API + '/api/issue/' + MINT_ID,
-            data={'user_id': user_id, 'amount': INIT_AMOUNT})
-
-    if r.status_code != 200:
-        return render_template('yuu/error.html',
-                message=res['error']['message'])
-
-    return render_template('yuu/top.html', name=name)
-
-
-@yuu.route('/log-in', methods=['GET', 'POST'])
-def log_in():
-    if request.method == 'GET':
-        return render_template('yuu/login.html')
 
     name = request.form.get('name')
 
@@ -285,174 +316,6 @@ def log_out():
     session.pop('name', None)
 
     return render_top()
-
-
-# payment
-@yuu.route("/pay", methods=['POST','GET'])
-def pay():
-    if 'user_id' not in session:
-        return render_top()
-
-    name = session['name']
-
-    s_url = PREFIX_QR + '/yuu/send?to_name=' + name
-    qr_b64data = qrmaker(s_url)
-    return render_template('yuu/pay.html',
-        qr_b64data=qr_b64data,
-        qr_name=s_url
-    )
-
-
-@yuu.route('/send', methods=['GET', 'POST'])
-def send():
-    if 'user_id' not in session:
-        return render_top()
-
-    name = session['name']
-    user_id = session['user_id']
-
-    if request.method == 'GET':
-        return get_balance(name, user_id)
-
-    to_name = request.form.get('to_name')
-    amount = request.form.get('amount')
-    item = request.form.get('item')
-    balance = int(request.form.get('balance'))
-
-    if to_name is None or len(to_name) <= 0:
-        return render_template('yuu/error.html',
-                message='to_name is missing')
-
-    if amount is None or len(amount) <= 0:
-        return render_template('yuu/error.html',
-                message='amount is missing', back_name='Transfer')
-
-    x = int(amount) if amount.isdecimal() else 0
-    if x <= 0:
-        return render_template('yuu/error.html',
-                message='amount must be non-zero positive number',
-                back_name='Transfer')
-    if x > balance:
-        return render_template('yuu/error.html',
-                message='not enough fund', back_name='Transfer')
-
-    r = requests.get(PREFIX_API + '/api/user', params={'name': to_name})
-    res = r.json()
-
-    if r.status_code != 200:
-        return render_template('yuu/error.html',
-                message=res['error']['message'])
-
-    to_user_id = res['user_id']
-
-    r = requests.post(PREFIX_API + '/api/transfer/' + MINT_ID, data={
-        'from_user_id': user_id,
-        'to_user_id': to_user_id,
-        'amount': amount,
-        'label': item
-    })
-
-    if r.status_code != 200:
-        return render_template('yuu/error.html',
-                message=res['error']['message'])
-
-    return get_balance(name, user_id, done=True)
-
-
-# contribution registration
-@yuu.route("/contributions", methods=['GET'])
-def contributions_prepare():
-    if 'user_id' not in session:
-        return render_top()
-
-    menu_name = "Register a contributions!"
-    info = ""
-    now = datetime.now(JST)
-    timeString = now.strftime(FORMAT_TIME)
-    return render_template("yuu/contributions.html", menu_name = menu_name,
-            info = info, time=timeString)
-
-
-@yuu.route("/contributions", methods=['POST'])
-def contributions_write():
-    if 'user_id' not in session:
-        return render_top()
-
-    name = session['name']
-
-    item = request.form.get('a')
-
-    if item is None or len(item) <= 0:
-        return render_template('yuu/error.html',
-                message='item is missing', back_name='Open a Shop')
-
-    store = Store()
-    store.setup()
-    store.write_item(int(time.time()), INFTY_TIME, name, item,
-            type='contributions')
-    store.close()
-
-    return render_template("yuu/contributions_posted.html")
-
-
-# list of transactions
-@yuu.route("/tx")
-def tx():
-    if 'user_id' not in session:
-        return render_top()
-
-    menu_name = "Transactions"
-    info = "Your transactions can be seen at 'My Page'"
-    now = datetime.now(JST)
-    timeString = now.strftime(FORMAT_TIME)
-
-    offset = request.args.get('offset')
-
-    if offset is None:
-        offset = 0
-
-    r = requests.get(PREFIX_API + '/api/transactions/' + MINT_ID, params={
-        'basetime': BASE_TIME,
-        'count': LIST_COUNT,
-        'offset': offset,
-    })
-    res = r.json()
-
-    reform_list(res['transactions'])
-
-    return render_template("yuu/tx.html", menu_name=menu_name,
-            info=info, time=timeString,
-            transactions=res['transactions'], count=LIST_COUNT,
-            count_before=res['count_before'], count_after=res['count_after'])
-
-
-# list of contributions
-@yuu.route("/contributionlist")
-def contributionlist():
-    if 'user_id' not in session:
-        return render_top()
-
-    name = session['name']
-
-    menu_name = "Recommended Givers"
-    info = "Newest Ones First"
-    now = datetime.now(JST)
-    timeString = now.strftime(FORMAT_TIME)
-
-    store = Store()
-    store.setup()
-    contributions = store.get_item_list('contributions', 10)
-    store.close()
-
-    for contribution in contributions:
-        t = datetime.fromtimestamp(contribution['timestamp'], JST)
-        contribution['timestamp'] = t.strftime(FORMAT_TIME)
-        t = datetime.fromtimestamp(contribution['good_until'], JST)
-        contribution['good_until'] = t.strftime(FORMAT_TIME)
-
-    return render_template("yuu/contributionlist.html", menu_name=menu_name,
-            info=info, time=timeString, name=name,
-            contributions=contributions)
 
 
 @yuu.route('/mypage')
@@ -487,17 +350,209 @@ def mypage():
 
     for tx in res['transactions']:
         if tx['to_name'] == name:
-            getcoin += int(tx['amount'])
+            if tx['from_name'] != "yuu'":
+                getcoin += int(tx['amount'])
         else:
             spendcoin += int(tx['amount'])
 
     menu_name = "My Page"
     now = datetime.now(JST)
     timeString = now.strftime(FORMAT_TIME)
-    return render_template("yuu/mypage.html", menu_name=menu_name,
-        name=name, balance=balance, symbol=symbol,
-        time=timeString, spendcoin=spendcoin, getcoin=getcoin,
+    return render_template("yuu/mypage.html", name=name, balance=balance,
+        symbol=symbol, spendcoin=spendcoin, getcoin=getcoin,
         transactions=res['transactions'])
+
+
+@yuu.route("/needs", methods=['GET', 'POST'])
+def needs():
+    if 'user_id' not in session:
+        return render_top()
+
+    if request.method == 'GET':
+        return render_template("yuu/needs.html")
+
+    name = session['name']
+    item = request.form.get('item')
+
+    if item is None or len(item) <= 0:
+        return render_template('yuu/error.html',
+                message='item is missing', back_name='Open a Shop')
+
+    sDate = request.form.get('date')
+    sTime = request.form.get('time')
+    good_until = get_time_from_string(sDate, sTime)
+
+    store = Store()
+    store.setup()
+    store.write_item(int(time.time()), good_until, name, item, type='needs')
+    store.close()
+
+    return render_template("yuu/needs_posted.html")
+
+
+@yuu.route("/list-needs")
+def needs_list():
+    if 'user_id' not in session:
+        return render_top()
+
+    name = session['name']
+
+    store = Store()
+    store.setup()
+    needs = store.get_item_list('needs', 10)
+    store.close()
+
+    for need in needs:
+        t = datetime.fromtimestamp(need['timestamp'], JST)
+        need['timestamp'] = t.strftime(FORMAT_TIME)
+        if need['good_until'] == INFTY_TIME:
+            need['good_until'] = msg_dict['* FOREVER *']
+        else:
+            t = datetime.fromtimestamp(need['good_until'], JST)
+            need['good_until'] = t.strftime(FORMAT_TIME)
+
+    return render_template("yuu/list_needs.html", name=name, needs=needs)
+
+
+@yuu.route("/receive", methods=['POST','GET'])
+def receive():
+    if 'user_id' not in session:
+        return render_top()
+
+    name = session['name']
+
+    s_url = PREFIX_QR + '/yuu/send?to_name=' + name
+    qr_b64data = qrmaker(s_url)
+    return render_template('yuu/receive.html',
+        qr_b64data=qr_b64data,
+        qr_name=s_url
+    )
+
+
+@yuu.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'GET':
+        return render_template('yuu/register.html')
+
+    name = request.form.get('name')
+
+    if name is None or len(name) <= 0:
+        return render_template('yuu/error.html',
+                message='name is missing', back_name='Register')
+
+    if name in ["yuu'", 'yuu', 'yuu"']:
+        return render_template('yuu/error.html',
+                message='invalid name', back_name='Register')
+
+    r = requests.post(PREFIX_API + '/api/user', data={'name': name})
+    res = r.json()
+
+    if r.status_code != 201:
+        return render_template('yuu/error.html',
+                message=res['error']['message'], back_name='Register')
+
+    session['name'] = name
+    session['user_id'] = res['user_id']
+
+    return render_template('yuu/top.html', name=name)
+
+
+@yuu.route('/send', methods=['GET', 'POST'])
+def send():
+    if 'user_id' not in session:
+        return render_top()
+
+    name = session['name']
+    user_id = session['user_id']
+
+    if request.method == 'GET':
+        return get_balance(name, user_id)
+
+    to_name = request.form.get('to_name')
+    amount = request.form.get('amount')
+    item = request.form.get('item')
+    balance = int(request.form.get('balance'))
+
+    if to_name is None or len(to_name) <= 0:
+        return render_template('yuu/error.html',
+                message='to_name is missing')
+
+    if amount is None or len(amount) <= 0:
+        return render_template('yuu/error.html',
+                message='amount is missing', back_name='Transfer')
+
+    x = int(amount) if amount.isdecimal() else 0
+    if x <= 0:
+        return render_template('yuu/error.html',
+                message='amount must be non-zero positive number',
+                back_name='Transfer')
+    if x > balance:
+        r = requests.post(PREFIX_API + '/api/issue/' + MINT_ID,
+                data={'user_id': user_id, 'amount': x - balance})
+
+        if r.status_code != 200:
+            return render_template('yuu/error.html',
+                    message=res['error']['message'])
+
+    r = requests.get(PREFIX_API + '/api/user', params={'name': to_name})
+    res = r.json()
+
+    if r.status_code != 200:
+        return render_template('yuu/error.html',
+                message=res['error']['message'])
+
+    to_user_id = res['user_id']
+
+    r = requests.post(PREFIX_API + '/api/transfer/' + MINT_ID, data={
+        'from_user_id': user_id,
+        'to_user_id': to_user_id,
+        'amount': amount,
+        'label': item
+    })
+
+    if r.status_code != 200:
+        return render_template('yuu/error.html',
+                message=res['error']['message'])
+
+    return get_balance(name, user_id, done=True)
+
+
+@yuu.route('/send-to-whom', methods=['GET'])
+def send_to_whom():
+    if 'user_id' not in session:
+        return render_top()
+
+    name = session['name']
+
+    r = requests.get(PREFIX_API + '/api/user')
+    res = r.json()
+
+    return render_template("yuu/send_to_whom.html", name=name,
+            users=res['users'])
+
+
+@yuu.route("/tx")
+def tx():
+    if 'user_id' not in session:
+        return render_top()
+
+    offset = request.args.get('offset')
+
+    if offset is None:
+        offset = 0
+
+    r = requests.get(PREFIX_API + '/api/transactions/' + MINT_ID, params={
+        'basetime': BASE_TIME,
+        'count': LIST_COUNT,
+        'offset': offset,
+    })
+    res = r.json()
+
+    reform_list(res['transactions'])
+
+    return render_template("yuu/tx.html", transactions=res['transactions'],
+            count=LIST_COUNT,
+            count_before=res['count_before'], count_after=res['count_after'])
 
 
 # end of app.py

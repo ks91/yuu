@@ -1,16 +1,15 @@
 {% extends "yuu/layout.html" %}
 {% block content %}
 <center>
-<h1>{{menu_name}}</h1>
-<h3>{{ info }}</h3>
-<h1>>>>>></h1>
+<h1>あげるもの・できることリスト</h1>
+<hr class="hbreak"/>
 </center>
 <table width="100%" height="70%" cellspacing="5" cellpadding="10">
 <tr align="center">
-<th bgcolor="#eeb417">登録日時</th>
-<th bgcolor="#eeb417">誰から</th>
-<th bgcolor="#eeb417">何を</th>
-<th bgcolor="#eeb417">いつまで</th>
+<th bgcolor="#ba9bc9">登録日時</th>
+<th bgcolor="#ba9bc9">誰から</th>
+<th bgcolor="#ba9bc9">何を</th>
+<th bgcolor="#ba9bc9">いつまで</th>
 </tr>
 {% for contribution in contributions %}
 {% if contribution['name'] == name %}
@@ -26,7 +25,7 @@
 {% endfor %}
 </table>
 <center>
-<h1>>>>>></h1>
+<hr class="hbreak"/>
 <button type="button" class="backbutton"　name="back" onclick="location.href='/yuu/'" value="sss">
 メニューに戻る
 </button>

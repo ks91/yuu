@@ -1,19 +1,19 @@
 {% extends "yuu/layout.html" %}
 {% block content %}
 <center>
-<h1>{{name}} の {{menu_name}}</h1>
-<h1>>>>>></h1>
-<h2>残高 : {{ balance }}&nbsp;{{symbol}}</h2>
-<h2>支出 : {{ spendcoin }}&nbsp;{{symbol}}</h2>
-<h2>収入 : {{ getcoin }}&nbsp;{{symbol}}</h2>
-<h1>>>>>></h1>
+<h1>{{name}} さんのマイページ</h1>
+<hr class="hbreak"/>
+<h2>手持ち分 : {{ balance }}&nbsp;{{symbol}}</h2>
+<h2>あげた分 : {{ spendcoin }}&nbsp;{{symbol}}</h2>
+<h2>もらった分 : {{ getcoin }}&nbsp;{{symbol}}</h2>
+<hr class="hbreak"/>
 <table width="100%" height="70%">
 <tr align="center">
-<th bgcolor="#eeb417">誰が</th>
-<th bgcolor="#eeb417">いつ</th>
-<th bgcolor="#eeb417">何を</th>
-<th bgcolor="#eeb417">何yuu'で</th>
-<th bgcolor="#eeb417">誰から</th>
+<th bgcolor="#ba9bc9">いつ</th>
+<th bgcolor="#ba9bc9">誰に</th>
+<th bgcolor="#ba9bc9">何を</th>
+<th bgcolor="#ba9bc9">yuu'</th>
+<th bgcolor="#ba9bc9">誰から</th>
 </tr>
 {% for tx in transactions %}
 {% if tx['to_name'] == name %}
@@ -21,15 +21,15 @@
 {% else %}
 <tr>
 {% endif %}
-<td>{{tx['from_name']}}</td>
 <td>{{tx['timestamp']}}</td>
+<td>{{tx['from_name']}}</td>
 <td>{{tx['label']}}</td>
 <td align="right">{{tx['amount']}}&nbsp;{{symbol}}</td>
 <td>{{tx['to_name']}}</td>
 </tr>
 {% endfor %}
 </table>
-<h1>>>>>></h1>
+<hr class="hbreak"/>
 <button type="button" class="backbutton"　name="back" onclick="location.href='/yuu/'" value="sss">
 メニューに戻る
 </button>

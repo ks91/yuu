@@ -1,33 +1,54 @@
 {% extends "yuu/layout.html" %}
 {% block content %}
 <center>
-<h1>yuu' へようこそ</h1>
-<h1>>>>>><br/>ごきげんいかがですか？ </h1>
-<h1>{{name}}!<br/>>>>>></h1>
+<h1>yuu'へようこそ</h1>
+<hr class="hbreak"/>
+<h2>{{name}} さん！<br/>ごきげんいかがですか？</h2>
+<hr class="hbreak"/>
 </center>
 <center>
 <p>
-<button type="button" class="widebutton" name="qr" onclick="location.href='/yuu/pay'">
-何かする？
+<button type="button" class="widebutton" name="qr" onclick="location.href='/yuu/receive'">
+yuu' をもらう？
 </button>
 </p>
 <p>
-<button type="button" class="widebutton" name="openashop" onclick="location.href='/yuu/contributions'" value="ddd">
+<button type="button" class="widebutton" name="whom" onclick="location.href='/yuu/send-to-whom'">
+yuu' をあげる？
+</button>
+</p>
+<p>
+<button type="button" class="widebutton" name="contribution" onclick="location.href='/yuu/contributions'">
 何かできることがある？
 </button>
 <p/>
 <p>
-<button type="button" class="widebutton"　name="TX" onclick="location.href='/yuu/tx'" value="eee">
-これまでの取引
+<button type="button" class="widebutton" name="need" onclick="location.href='/yuu/needs'">
+してほしいことがある？
+</button>
+<p/>
+<p>
+<button type="button" class="widebutton"　name="TX" onclick="location.href='/yuu/tx'">
+これまでのやりとり
 </button>
 </p>
 <p>
-<button type="button" class="widebutton"　name="shops" onclick="location.href='/yuu/contributionlist'" value="fff">
-できることリスト
+<button type="button" class="widebutton"　name="mypage" onclick="location.href='/yuu/mypage'">
+マイページ
 </button>
 </p>
 <p>
-<button type="button" class="widebutton" name="logout" onclick="location.href='/yuu/log-out'" value="fff">
+<button type="button" class="widebutton"　name="shops" onclick="location.href='/yuu/list-contributions'">
+あげるもの・できることリスト
+</button>
+</p>
+<p>
+<button type="button" class="widebutton"　name="wants" onclick="location.href='/yuu/list-needs'">
+ほしいもの・してほしいことリスト
+</button>
+</p>
+<p>
+<button type="button" class="widebutton" name="logout" onclick="location.href='/yuu/log-out'">
 ログアウト
 </button>
 </p>

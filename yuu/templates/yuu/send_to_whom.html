@@ -1,0 +1,27 @@
+{% extends "yuu/layout.html" %}
+{% block content %}
+<center>
+<h1>yuu'をあげる？</h1>
+<h1>誰にあげますか？</h1>
+<hr class="hbreak"/>
+<form action="/yuu/send" method="get" name="send_form">
+<h2>
+<input type="text" name="to_name" list="users" placeholder="選んでください" autocomplete="off">
+  <datalist id="users">
+  {% for user in users %}
+  {% if user['name'] != name %}
+  <option value="{{user['name']}}">
+  {% endif %}
+  {% endfor %}
+  </datalist>
+</h2>
+<button type="submit"  class="widebutton" value="next">
+次へ
+</button>
+</form>
+<hr class="hbreak"/>
+<button type="button" class="backbutton"　name="back" onclick="location.href='/yuu/'">
+メニューに戻る
+</button>
+</center>
+{% endblock %}

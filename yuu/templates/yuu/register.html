@@ -1,17 +1,8 @@
 {% extends "yuu/layout.html" %}
 {% block content %}
-<div>
-{% if [0, 1] | random == 0 %}
-<img src="/yuu/static/images/yuu-logo.jpg" width="100%"  alt="top-picture">
-{% else %}
-<img src="/yuu/static/images/yuu-top-{{ [1, 2] | random }}.jpg" width="100%"  alt="top-picture">
-{% endif %}
-</div>
-<center>すでにメンバー？ <a href="/yuu/log-in">ログイン</a></center>
 <center>
-<h2>ニックネームを決めて！</h2>
-<h3>日時: {{ time }}</h3>
-<h1>>>>>></h1>
+<h2>ニックネームを決めてください</h2>
+<hr class="hbreak"/>
 </center>
 <form action="/yuu/register" method="post">
 <div>
@@ -20,9 +11,10 @@
 </center>
 </div>
 <center>
-<h1>>>>>></h1>
-<p><button type="submit" class="widebutton">
-登録
+<hr class="hbreak"/>
+<p>
+<button type="submit" value="Register" class="widebutton"/>
+登録する
 </button>
 </p>
 </center>

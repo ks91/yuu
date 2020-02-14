@@ -33,6 +33,13 @@ width: 40%;
 height: 50px
 }
 
+.hbreak {
+    height: 10px;
+    background-color: #ba9bc9;
+    width: 50%;
+    border: none;
+}
+
 ul.listnav {
     margin: 0 0 10px;
     padding: 12px;

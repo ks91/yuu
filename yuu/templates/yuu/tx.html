@@ -1,27 +1,27 @@
 {% extends "yuu/layout.html" %}
 {% block content %}
 <center>
-<h1>{{menu_name}}<br/>>>>>></h1>
-<h2>{{ info }}</h2>
+<h1>これまでのやりとり</h1>
+<hr class="hbreak">
 <button type="button" class="widebutton"　name="mypage" onclick="location.href='/yuu/mypage'" value="fff">
-私のページ
+マイページ
 </button>
 <br/>
-<h1>>>>>></h1>
+<hr class="hbreak"/>
 </center>
 <br/>
 <table width="100%" height="70%" cellspacing="5" cellpadding="10">
 <tr align="center">
-<th bgcolor="#eeb417">誰が</th>
-<th bgcolor="#eeb417">何を</th>
-<th bgcolor="#eeb417">いつ</th>
-<th bgcolor="#eeb417">誰から</th>
+<th bgcolor="#ba9bc9">いつ</th>
+<th bgcolor="#ba9bc9">誰に</th>
+<th bgcolor="#ba9bc9">何を</th>
+<th bgcolor="#ba9bc9">誰から</th>
 </tr>
 {% for tx in transactions %}
 <tr>
+<td>{{tx['timestamp']}}</td>
 <td>{{tx['from_name']}}</td>
 <td>{{tx['label']}}</td>
-<td>{{tx['timestamp']}}</td>
 <td>{{tx['to_name']}}</td>
 </tr>
 {% endfor %}
@@ -39,7 +39,7 @@
 {% endif %}
 </ul>
 <center>
-<h1>>>>>></h1>
+<hr class="hbreak"/>
 <button type="button" class="backbutton"　name="back" onclick="location.href='/yuu/'" value="sss">
 メニューに戻る
 </button>

@@ -1,0 +1,33 @@
+{% extends "yuu/layout.html" %}
+{% block content %}
+<center>
+<h1>ほしいもの・してほしいことリスト</h1>
+<hr class="hbreak"/>
+</center>
+<table width="100%" height="70%" cellspacing="5" cellpadding="10">
+<tr align="center">
+<th bgcolor="#ba9bc9">登録日時</th>
+<th bgcolor="#ba9bc9">誰に</th>
+<th bgcolor="#ba9bc9">何を</th>
+<th bgcolor="#ba9bc9">いつまでに</th>
+</tr>
+{% for need in needs %}
+{% if need['name'] == name %}
+<tr style="color: #ff8080">
+{% else %}
+<tr>
+{% endif %}
+<td>{{need['timestamp']}}</td>
+<td>{{need['name']}}</td>
+<td>{{need['item']}}</td>
+<td>{{need['good_until']}}</td>
+</tr>
+{% endfor %}
+</table>
+<center>
+<hr class="hbreak"/>
+<button type="button" class="backbutton"　name="back" onclick="location.href='/yuu/'" value="sss">
+メニューに戻る
+</button>
+</center>
+{% endblock %}
