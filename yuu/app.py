@@ -30,21 +30,19 @@ from PIL import Image
 
 from yuu.message import msg_dict
 
-
 # Prior to use this web application, please define a currency using API,
-# and put the mint_id here.
-MINT_ID = '1f35585c480efc3f924d85029defe1242437b3ef4f42aedabcbec0e4acd2b3af'
+# and put the mint_id there.
+from yuu.const import MINT_ID
 
+# Put API host name there, and prefix for URL encoded in QR code.
+from yuu.const import PREFIX_API
+from yuu.const import PREFIX_QR
 
-# Put API host name here, and prefix for URL encoded in QR code.
-PREFIX_API = 'http://127.0.0.1:5000'
-PREFIX_QR  = 'http://192.168.86.87:5000'
+# Put base time (to count transactions) in Unix time there.
+from yuu.const import BASE_TIME
 
-# Put base time (to count transactions) in Unix time here.
-BASE_TIME = 0
-
-# Put the number of transactions to show in a list page here.
-LIST_COUNT = 10
+# Put the number of transactions to show in a list page there.
+from yuu.const import LIST_COUNT
 
 
 NAME_OF_DB = 'yuu_db'

@@ -33,6 +33,22 @@ width: 40%;
 height: 50px
 }
 
+p {
+    font-size: 150%;
+}
+
+input[type="text"] {
+    width: 80%;
+}
+
+input[type="date"] {
+    width: 50%;
+}
+
+input[type="time"] {
+    width: 30%;
+}
+
 .hbreak {
     height: 10px;
     background-color: #ba9bc9;

@@ -5,21 +5,20 @@
 <form action="/yuu/contributions" method="post">
 <hr class="hbreak"/>
 <h2>何をあげたり、できますか？</h2>
-<p/>
-<h3>
+<p>
 <input type="text" name="item" list="item" placeholder="選ぶか入力してください" autocomplete="off" required>
   <datalist id="item">
     <option value="手伝う">
     <option value="お話する">
   </datalist>
-</h3>
+</p>
 <h2>いつまで？</h2>
 <p>省略すると「いつまでも」になります。
 時刻を省略するとその日の終わりまでになります。</p>
-<h3>
+<p>
 <input type="date" name="date" placeholder="yyyy-mm-dd"/>
 <input type="time" name="time" placeholder="HH:MM"/>
-</h3>
+</p>
 <hr class="hbreak"/>
 <button type="submit" class="widebutton" value="Open">
 公開する
@@ -28,7 +27,7 @@
 <div>
 </div>
 <hr class="hbreak"/>
-<button type="button" onclick="location.href='/yuu/'" class="backbutton"　name="back"  value="sss">
+<button type="button" onclick="location.href='/yuu/'" class="backbutton" name="back">
 メニューに戻る
 </button>
 </center>

@@ -2,12 +2,12 @@
 {% block content %}
 <center>
 <h1>エラーが起きました</h1>
-<h3>
+<p>
 {{message}}
-</h3>
+</p>
 <hr class="hbreak"/>
 <p>
-<button type="button" class="backbutton"　name="back" onclick="history.back()" value="sss">
+<button type="button" class="backbutton"　name="back" onclick="history.back()">
     {% if back_name %} {{back_name}}に{% endif %}戻る
 </button>
 </p>

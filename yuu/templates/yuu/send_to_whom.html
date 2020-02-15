@@ -2,10 +2,10 @@
 {% block content %}
 <center>
 <h1>yuu'を贈る？</h1>
-<h1>誰に贈りますか？</h1>
+<h2>誰に贈りますか？</h2>
 <hr class="hbreak"/>
 <form action="/yuu/send" method="get" name="send_form">
-<h2>
+<p>
 <input type="text" name="to_name" list="users" placeholder="選んでください" autocomplete="off" required>
   <datalist id="users">
   {% for user in users %}
@@ -14,7 +14,7 @@
   {% endif %}
   {% endfor %}
   </datalist>
-</h2>
+</p>
 <button type="submit"  class="widebutton" value="next">
 次へ
 </button>

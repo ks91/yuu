@@ -8,27 +8,27 @@
 </p>
 {% if sending %}
 <p>足らなくても贈れます</p>
-<h1>{{to_name}} さんに贈りますか？</h1>
+<h2>{{to_name}} さんに贈りますか？</h2>
 <hr class="hbreak"/>
 <form action="/yuu/send" method="post" name="send_form">
-<h2>
+<p>
 <input type="text" name="amount" list="coin" placeholder="選ぶか入力してください" autocomplete="off" required>
   <datalist id="coin">
     <option value="1">
     <option value="2">
     <option value="3">
   </datalist>
-{{symbol}}
-</h2>
-<h2>
+<br/>{{symbol}} を
+</p>
+<p>
 <input type="text" name="item" list="items" placeholder="選ぶか入力してください" autocomplete="off" required>
   <datalist id="items">
     {% for item in items %}
     <option value="{{item}}">
     {% endfor %}
   </datalist>
-のお礼として
-</h2>
+<br/>のお礼として
+</p>
 <input type="hidden" id="to_name" name="to_name" value="{{to_name}}">
 <input type="hidden" id="balance" name="balance" value="{{balance}}">
 <button type="submit"  class="widebutton" value="Transfer">
@@ -38,10 +38,10 @@
 {% else %}
 <h1>贈りました!</h1>
 <hr class="hbreak"/>
-<h1>引き続き<br>よろしくお願いいたします</h1>
+<p>引き続き、よろしくお願いいたします</p>
 {% endif %}
 <hr class="hbreak"/>
-<button type="button" class="backbutton"　name="back" onclick="location.href='/yuu/'" value="sss">
+<button type="button" class="backbutton"　name="back" onclick="location.href='/yuu/'">
 メニューに戻る
 </button>
 </center>

@@ -7,7 +7,11 @@
 <img src="/yuu/static/images/yuu-top-{{ [1, 2] | random }}.jpg" width="100%"  alt="top-picture">
 {% endif %}
 </div>
-<center>初めてですか？ →<a href="/yuu/register">登録してください</a></center>
+<center>
+<p>
+初めてですか？ →<a href="/yuu/register">登録してください</a>
+</p>
+</center>
 <center>
 <h2>ニックネームをどうぞ</h2>
 <hr class="hbreak"/>
@@ -15,7 +19,13 @@
 <form action="/yuu/log-in" method="post">
 <div>
 <center>
-<h3>ニックネーム：<input type="text" name="name" required/></h3>
+<p>
+ニックネーム：<br/>
+<input type="text" name="name" required/>
+</p>
+<p>
+* Cookie を有効にしておいてください。
+</p>
 </center>
 </div>
 <center>

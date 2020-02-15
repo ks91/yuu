@@ -3,9 +3,15 @@
 <center>
 <h1>{{name}} さんのマイページ</h1>
 <hr class="hbreak"/>
-<h2>手持ち分 : {{ balance }}&nbsp;{{symbol}}</h2>
-<h2>贈った分 : {{ spendcoin }}&nbsp;{{symbol}}</h2>
-<h2>受け取った分 : {{ getcoin }}&nbsp;{{symbol}}</h2>
+<p>
+手持ち分 : {{ balance }}&nbsp;{{symbol}}
+</p>
+<p>
+贈った分 : {{ spendcoin }}&nbsp;{{symbol}}
+</p>
+<p>
+受け取った分 : {{ getcoin }}&nbsp;{{symbol}}
+</p>
 <hr class="hbreak"/>
 <table width="100%" height="70%">
 <tr align="center">
@@ -30,7 +36,7 @@
 {% endfor %}
 </table>
 <hr class="hbreak"/>
-<button type="button" class="backbutton"　name="back" onclick="location.href='/yuu/'" value="sss">
+<button type="button" class="backbutton"　name="back" onclick="location.href='/yuu/'">
 メニューに戻る
 </button>
 </center>
