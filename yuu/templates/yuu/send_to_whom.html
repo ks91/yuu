@@ -1,12 +1,12 @@
 {% extends "yuu/layout.html" %}
 {% block content %}
 <center>
-<h1>yuu'をあげる？</h1>
-<h1>誰にあげますか？</h1>
+<h1>yuu'を贈る？</h1>
+<h1>誰に贈りますか？</h1>
 <hr class="hbreak"/>
 <form action="/yuu/send" method="get" name="send_form">
 <h2>
-<input type="text" name="to_name" list="users" placeholder="選んでください" autocomplete="off">
+<input type="text" name="to_name" list="users" placeholder="選んでください" autocomplete="off" required>
   <datalist id="users">
   {% for user in users %}
   {% if user['name'] != name %}

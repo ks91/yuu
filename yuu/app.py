@@ -172,7 +172,7 @@ def get_balance(name, user_id, done=False):
     if not done:
         if to_name is None or len(to_name) <= 0:
             return render_template('yuu/error.html',
-                    message='to_name is missing')
+                    message=msg_dict['to_name is missing'])
 
         store = Store()
         store.setup()
@@ -242,7 +242,7 @@ def contributions():
 
     if item is None or len(item) <= 0:
         return render_template('yuu/error.html',
-                message='item is missing', back_name='contributions')
+                message=msg_dict['contribution item is missing'])
 
     sDate = request.form.get('date')
     sTime = request.form.get('time')
@@ -295,14 +295,14 @@ def log_in():
 
     if name is None or len(name) <= 0:
         return render_template('yuu/error.html',
-                message='name is missing', back_name='Log In')
+                message=msg_dict['name is missing'])
 
     r = requests.get(PREFIX_API + '/api/user', params={'name': name})
     res = r.json()
 
     if r.status_code != 200:
         return render_template('yuu/error.html',
-                message=res['error']['message'], back_name='Log In')
+                message=res['error']['message'])
 
     session['name'] = name
     session['user_id'] = res['user_id']
@@ -376,7 +376,7 @@ def needs():
 
     if item is None or len(item) <= 0:
         return render_template('yuu/error.html',
-                message='item is missing', back_name='Open a Shop')
+                message=msg_dict['need item is missing'])
 
     sDate = request.form.get('date')
     sTime = request.form.get('time')
@@ -438,18 +438,18 @@ def register():
 
     if name is None or len(name) <= 0:
         return render_template('yuu/error.html',
-                message='name is missing', back_name='Register')
+                message=msg_dict['name is missing'])
 
     if name in ["yuu'", 'yuu', 'yuu"']:
         return render_template('yuu/error.html',
-                message='invalid name', back_name='Register')
+                message=msg_dict['invalid name'])
 
     r = requests.post(PREFIX_API + '/api/user', data={'name': name})
     res = r.json()
 
     if r.status_code != 201:
         return render_template('yuu/error.html',
-                message=res['error']['message'], back_name='Register')
+                message=res['error']['message'])
 
     session['name'] = name
     session['user_id'] = res['user_id']
@@ -475,24 +475,20 @@ def send():
 
     if to_name is None or len(to_name) <= 0:
         return render_template('yuu/error.html',
-                message='to_name is missing')
+                message=msg_dict['to_name is missing'])
 
     if amount is None or len(amount) <= 0:
         return render_template('yuu/error.html',
-                message='amount is missing', back_name='Transfer')
+                message=msg_dict['amount is missing'])
 
     x = int(amount) if amount.isdecimal() else 0
     if x <= 0:
         return render_template('yuu/error.html',
-                message='amount must be non-zero positive number',
-                back_name='Transfer')
-    if x > balance:
-        r = requests.post(PREFIX_API + '/api/issue/' + MINT_ID,
-                data={'user_id': user_id, 'amount': x - balance})
+                message=msg_dict['amount must be non-zero positive number'])
 
-        if r.status_code != 200:
-            return render_template('yuu/error.html',
-                    message=res['error']['message'])
+    if item is None or len(item) <= 0:
+        return render_template('yuu/error.html',
+                message=msg_dict['reason item is missing'])
 
     r = requests.get(PREFIX_API + '/api/user', params={'name': to_name})
     res = r.json()
@@ -502,6 +498,14 @@ def send():
                 message=res['error']['message'])
 
     to_user_id = res['user_id']
+
+    if x > balance:
+        r = requests.post(PREFIX_API + '/api/issue/' + MINT_ID,
+                data={'user_id': user_id, 'amount': x - balance})
+
+        if r.status_code != 200:
+            return render_template('yuu/error.html',
+                    message=res['error']['message'])
 
     r = requests.post(PREFIX_API + '/api/transfer/' + MINT_ID, data={
         'from_user_id': user_id,

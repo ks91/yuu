@@ -19,6 +19,15 @@ limitations under the License.
 msg_dict = {
     '* CREDIT *': '* 信頼 *',
     '* FOREVER *': '* いつまでも *',
+    'amount is missing': "贈る yuu'が指定されていません",
+    'amount must be non-zero positive number': "贈る yuu' は1以上でお願いします",
+    'contribution item is missing': 'あげるもの・できることが指定されていません',
+    'invalid name': '指定できないニックネームです',
+    'name is missing': 'ニックネームが指定されていません',
+    'need item is missing': 'ほしいもの・してほしいことが指定されていません',
+    'reason item is missing': '何のお礼なのかが指定されていません',
+    'to_name is missing': '贈り先が指定されていません',
+
 }
 
 
