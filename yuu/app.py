@@ -440,7 +440,8 @@ def register():
         return render_template('yuu/error.html',
                 message=msg_dict['name is missing'])
 
-    if name in ["yuu'", 'yuu', 'yuu"']:
+    if any(c in ' \t\'"+-!#$%&()=^~\\|`{}@[]:;*?<>,.' for c in name) or \
+            name in ['yuu']:
         return render_template('yuu/error.html',
                 message=msg_dict['invalid name'])
 
